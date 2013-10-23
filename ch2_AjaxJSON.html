@@ -88,27 +88,41 @@ function initProgram() {
 /**
 * Creates an AJAX request to load a model asynchronously
 */
+// DEBUGGING for LOCAL server
 function loadModel(filename){
     var request = new XMLHttpRequest();
-    var resource = "http://"+document.domain+ filename
-    request.open("GET",filename);
+    var root_path = 'http://fuzzymint.github.io/webgl-teapot/models/';
+    var resource = root_path + filename
+
+    $.get('http://jsonp.jit.su/?url=' + resource, function(data){
+        handleLoadedModel(filename,data);
+    });
+}
+
+/*
+function loadModel(filename){
+    var request = new XMLHttpRequest();
+    var root_path = 'http://fuzzymint.github.io/webgl-teapot/';
+    var resource = root_path + filename
+    request.open("GET",resource);
+    
     request.onreadystatechange = function() {
         console.info(request.readyState +' - '+request.status); 
       if (request.readyState == 4) {
-	    if(request.status == 200) { //OK
-			handleLoadedModel(filename,JSON.parse(request.responseText));
-		 }
-		else if (document.domain.length == 0 && request.status == 0){ //OK but local, no web server
+        if(request.status == 200) { //OK
+            handleLoadedModel(filename,JSON.parse(request.responseText));
+         }
+        else if (document.domain.length == 0 && request.status == 0){ //OK but local, no web server
             handleLoadedModel(filename,JSON.parse(request.responseText));
         }
         else{
             alert ('There was a problem loading the file :' + filename);
             alert ('HTML error code: ' + request.status);
-		}
-	  }
+        }
+      }
     }
     request.send();
-}
+}*/
 
 /**
 * Creates the buffers that contain the geometry of the model
@@ -182,8 +196,9 @@ function runWebGLApp(){
     gl = utils.getGLContext('canvas-element-id');
     //Initializes the program (shaders). More about this on chapter 3!
     initProgram();
+
     //Loads a model from the web server using AJAX + JSON
-    loadModel('models/cone.json');
+    loadModel('teapot.json');
     //Renders the scene!
     renderLoop();
 }
@@ -195,7 +210,6 @@ function runWebGLApp(){
 <div id='top'>
     <h1>WebGL Beginner's Guide - Chapter 2</h1>
     <h2>Asynchronous Loading with JSON and AJAX</h2>
-    <div id='logo-packt'><img src='packt.gif'/></div>
     <p>Please review the functions loadModel and handleLoadedModel to understand how we can load complex geometries from files
     instead of specifying them directly into the webpage using JavaScript arrays</p>
 </div>
