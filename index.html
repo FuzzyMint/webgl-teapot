@@ -136,7 +136,7 @@ function updateTransforms() {
     
     mat4.identity(mvMatrix);
 
-    mat4.translate(mvMatrix, [0.0, -6.0, -50.0]);
+    mat4.translate(mvMatrix, [0.0, -3.0, -25.0]);
     
     // Rotate about world's y axis
     mat4.rotateX(mvMatrix, elevation/100);
@@ -200,6 +200,7 @@ function loadModel(filename, alias, isObjFile){
     var url = 'http://jsonp.jit.su/?url=' + resource
     var object = loadObjFile(resource);
     object.alias = (alias==null)?'none':alias;
+    console.log(object);
     Scene.addObject(object)
 }
 
@@ -227,7 +228,7 @@ function draw() {
                 //mat4.identity(mvMatrix);
                 object.diffuse = [0.0,0.6,0.6,1.0];
                 mat4.translate(mvMatrix, [0.0, 1.5, 0.0]);
-                mat4.scale(mvMatrix,[0.2, 0.2, 0.2]);
+                //mat4.scale(mvMatrix,[0.2, 0.2, 0.2]);
                 setMatrixUniforms();
             }
 

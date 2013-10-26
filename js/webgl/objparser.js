@@ -47,7 +47,7 @@ function loadObjFile (url) {
         }
     });
 
-    return { vertices: objParser.vertices, faces: objParser.faces };
+    return { vertices: objParser.vertices, indices: objParser.faces };
 }
 
 /**
