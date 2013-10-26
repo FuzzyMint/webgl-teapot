@@ -11,6 +11,7 @@
 <!-- WEBGL Libraries //-->
 <script type='text/javascript' src='js/webgl/Utils.js'></script>
 <script type='text/javascript' src='js/webgl/Program.js'></script>
+<script type='text/javascript' src='js/webgl/objparser.js'></script>
 <script type='text/javascript' src='js/webgl/Scene.js'></script>
 <script type='text/javascript' src='js/webgl/Axis.js'></script>
 <script type='text/javascript' src='js/webgl/Floor.js'></script>
@@ -197,7 +198,7 @@ function loadModel(filename, alias, isObjFile){
     var root_path = 'http://fuzzymint.github.io/webgl-teapot/models/';
     var resource = root_path + filename
     var url = 'http://jsonp.jit.su/?url=' + resource
-    var object = objParser.loadObjFile(url)
+    var object = loadObjFile(resource);
     object.alias = (alias==null)?'none':alias;
     Scene.addObject(object)
 }
