@@ -66,14 +66,13 @@ var Program = {
      prg.uMVMatrix        = gl.getUniformLocation(prg, 'uMVMatrix');
      prg.uNMatrix           = gl.getUniformLocation(prg, "uNMatrix");
 
-     //prg.uMaterialDiffuse  = gl.getUniformLocation(prg, "uMaterialDiffuse");
-     //prg.uPerVertexColor   = gl.getUniformLocation(prg, "uPerVertexColor");
+     prg.uSampler = gl.getUniformLocation(prg, "uSampler");
     prg.uMaterialAmbient   = gl.getUniformLocation(prg, "uMaterialAmbient"); 
     prg.uMaterialSpecular  = gl.getUniformLocation(prg, "uMaterialSpecular");
     prg.uShininess          = gl.getUniformLocation(prg, "uShininess");
     prg.uMaterialDiffuse  = gl.getUniformLocation(prg, "uMaterialDiffuse");
 
-prg.uLightPosition      = gl.getUniformLocation(prg, "uLightPosition");
+    prg.uLightPosition      = gl.getUniformLocation(prg, "uLightPosition");
     prg.uLightDiffuse     = gl.getUniformLocation(prg, "uLightDiffuse");
     prg.uLightSpecular     = gl.getUniformLocation(prg, "uLightSpecular");
     prg.uLightAmbient      = gl.getUniformLocation(prg, "uLightAmbient");
