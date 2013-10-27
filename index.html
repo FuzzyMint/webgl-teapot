@@ -63,6 +63,7 @@ precision highp float;
 #endif
 
 uniform sampler2D uSampler; //Texture sampler
+uniform samplerCube uCubeSampler;
 
 uniform float uShininess;        //shininess
 uniform vec3 uLightDirection;  //light direction
@@ -82,10 +83,11 @@ varying vec3 vVertexPosition;
 
 void main(void)
 {
-     vec3 L = normalize(vLightRay);
-     vec3 N = normalize(vNormal);
      float theta = atan(vVertexPosition.z, vVertexPosition.x);
      vec2 textureCoord = vec2(theta, vVertexPosition.y) * 0.35 + vec2(0.1, 0.1);
+
+     vec3 L = normalize(vLightRay);
+     vec3 N = normalize(vNormal);
      
      //Lambert's cosine law
      float lambertTerm = dot(N,-L);
@@ -114,7 +116,7 @@ void main(void)
      vec4 finalColor = Ia + Id + Is;
      finalColor.a = 1.0;
      
-     gl_FragColor = finalColor * texture2D(uSampler, textureCoord);
+     gl_FragColor = finalColor * texture2D(uSampler, textureCoord) * textureCube(uCubeSampler, -vNormal);
 }
 </script>
 
@@ -127,6 +129,7 @@ var mvMatrix = mat4.create();
 var nMatrix =  mat4.create();      // The normal matrix
 
 var teapotTexture = null;
+var cubeTexture = null;
 
 var c_width = 720;
 var c_height = 540;
@@ -140,6 +143,7 @@ function configure(){
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
     initTexture();
+    initCubeMap();
     initTransforms();
 }
 
@@ -156,7 +160,33 @@ function initTexture(){
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
-  image.src = 'textures/marble.jpg';
+  image.src = 'textures/wood.jpg';
+}
+
+function initCubeMap(){
+  //Init Cube map
+  function loadCubemapFace(gl, target, texture, url) {
+    var image = new Image();
+    image.onload = function(){
+      gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+      gl.texImage2D(target, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
+    }
+    image.src = url;
+  };
+  
+  cubeTexture = gl.createTexture();
+  
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, cubeTexture);
+  gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_POSITIVE_X, cubeTexture, 'textures/cubemap/positive_x.png');
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_NEGATIVE_X, cubeTexture, 'textures/cubemap/negative_x.png');
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_POSITIVE_Y, cubeTexture, 'textures/cubemap/positive_y.png');
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, cubeTexture, 'textures/cubemap/negative_y.png');
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_POSITIVE_Z, cubeTexture, 'textures/cubemap/positive_z.png');
+  loadCubemapFace(gl, gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, cubeTexture, 'textures/cubemap/negative_z.png');
 }
 
 /**
@@ -255,13 +285,17 @@ function draw() {
             if(object.alias == 'teapot') {
                 //console.log('drawing teapot')
                 //mat4.identity(mvMatrix);
-                object.diffuse = [0.0,0.6,0.6,1.0];
+                object.diffuse = [1.0,1.0,1.0,1.0];
                 mat4.translate(mvMatrix, [0.0, 1.5, 0.0]);
 
                 gl.activeTexture(gl.TEXTURE0);
                 gl.bindTexture(gl.TEXTURE_2D, teapotTexture);
-                gl.uniform1i(Program.uSampler, 0);
-                //mat4.scale(mvMatrix,[0.2, 0.2, 0.2]);
+                gl.uniform1i(prg.uSampler, 0);
+
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_CUBE_MAP, cubeTexture);
+                gl.uniform1i(prg.uCubeSampler, 1);
+
                 setMatrixUniforms();
             }
 

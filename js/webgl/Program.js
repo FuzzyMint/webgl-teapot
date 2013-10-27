@@ -66,7 +66,9 @@ var Program = {
      prg.uMVMatrix        = gl.getUniformLocation(prg, 'uMVMatrix');
      prg.uNMatrix           = gl.getUniformLocation(prg, "uNMatrix");
 
-     prg.uSampler = gl.getUniformLocation(prg, "uSampler");
+    prg.uSampler = gl.getUniformLocation(prg, "uSampler");
+    prg.uCubeSampler = gl.getUniformLocation(prg, "uCubeSampler");
+
     prg.uMaterialAmbient   = gl.getUniformLocation(prg, "uMaterialAmbient"); 
     prg.uMaterialSpecular  = gl.getUniformLocation(prg, "uMaterialSpecular");
     prg.uShininess          = gl.getUniformLocation(prg, "uShininess");
@@ -77,14 +79,14 @@ var Program = {
     prg.uLightSpecular     = gl.getUniformLocation(prg, "uLightSpecular");
     prg.uLightAmbient      = gl.getUniformLocation(prg, "uLightAmbient");
 
-    gl.uniform3fv(prg.uLightPosition,[10 + 4.5,10 + 3.0, 10 + 15.0]);        
-    gl.uniform4fv(prg.uLightAmbient, [0.03,0.03,0.03,1.0]);
+    gl.uniform3fv(prg.uLightPosition,[4.5,3.0,15.0]);        
+    gl.uniform4fv(prg.uLightAmbient, [0.7,0.7,0.7,1.0]);
     gl.uniform4fv(prg.uLightDiffuse,  [1.0,1.0,1.0,1.0]); 
     gl.uniform4fv(prg.uLightSpecular,  [1.0,1.0,1.0,1.0]);
     gl.uniform4fv(prg.uMaterialAmbient, [1.0,1.0,1.0,1.0]); 
     gl.uniform4fv(prg.uMaterialDiffuse, [0.5,0.8,0.1,1.0]);
     gl.uniform4fv(prg.uMaterialSpecular,[1.0,1.0,1.0,1.0]);
-    gl.uniform1f(prg.uShininess, 100.0);
+    gl.uniform1f(prg.uShininess, 200.0);
 
     }
 }
