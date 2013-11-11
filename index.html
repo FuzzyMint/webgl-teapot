@@ -252,12 +252,12 @@ function load(){
 /**
 * Creates an AJAX request to load a model asynchronously
 */
-// DEBUGGING for LOCAL server
 function loadModel(filename, alias, isObjFile){
     var request = new XMLHttpRequest();
     var root_path = 'http://fuzzymint.github.io/webgl-teapot/models/';
     var resource = root_path + filename
-    var url = 'http://jsonp.jit.su/?url=' + resource
+    // DEBUGGING for LOCAL server: http://jsonp.jit.su/?url=' 
+    var url = resource
     var object = loadObjFile(resource);
     object.alias = (alias==null)?'none':alias;
     Scene.addObject(object)
